@@ -1,73 +1,73 @@
 import React from 'react'
 import CodigoList from './codigo-list'
 import '../App.css';
-import {browserHistory} from 'react-router-3';
+import { browserHistory } from 'react-router-3';
 import CONFIG from '../Configuracion/Config';
 
 //importar alumnoglobal
 
-class VistaIntermediaLoginAlumno extends React.Component{
-    constructor(props){
+class VistaIntermediaLoginAlumno extends React.Component {
+    constructor(props) {
         super(props)
-        this.state={
-            name:this.props.params.name,
-            cod:this.props.params.cod,
-            alumnos:[]
+        this.state = {
+            name: this.props.params.name,
+            cod: this.props.params.cod,
+            alumnos: []
         }
-        this.Regresar=this.Regresar.bind(this);
+        this.Regresar = this.Regresar.bind(this);
     }
 
 
-    componentWillMount() {
+    componentWillMount () {
 
-    fetch(CONFIG+'/recaudaciones/alumno/concepto/listar_codigoslog/'+ this.state.name + "/" + this.state.cod)
-    .then((response)=>{
-        return response.json()
-    })
-    .then((alumno)=>{
-        console.log("alumnosxd");
-            console.log(alumno);
-        this.setState({alumnos:alumno})
-        //guardar data en el store global
-    })
-    .catch(error=>{
-        console.error(error)
+        fetch(CONFIG + '/recaudaciones/alumno/concepto/listar_codigoslog/' + this.state.name + "/" + this.state.cod)
+            .then((response) => {
+                return response.json()
+            })
+            .then((alumno) => {
+                console.log("alumnosxd");
+                console.log(alumno);
+                this.setState({ alumnos: alumno })
+                //guardar data en el store global
+            })
+            .catch(error => {
+                console.error(error)
 
-    });
+            });
 
-    
-}
 
-render() {
-    return (
-      <div className="">
-            <h3>Selección de codigo
+    }
+
+    render () {
+        return (
+            <div className="">
+                <h3>Selección de codigo
             <ul id="nav-mobile" className="right  hide-on-med-and-down">
-            <li ><a className="seleccionar" onClick={this.Regresar} >Salir<i className="material-icons right">reply</i></a></li>
-        </ul>
-            </h3>
-          
-        <hr />
+                        <li ><a className="seleccionar" onClick={this.Regresar} >Salir<i className="material-icons right">reply</i></a></li>
+                    </ul>
+                </h3>
 
-      <div className="row center-xs centrar">
-          <div className="center-xs-12 margin_top ">
-              <CodigoList lista={this.state.alumnos} />
+                <hr />
+
+                <div className="row center-xs centrar">
+                    <div className="center-xs-12 margin_top ">
+                        <CodigoList lista={this.state.alumnos} />
+                    </div>
+                </div>
+                <footer>
+                    <div className="row center-xs centrar color">
+                        Proyecto SIGAP © 2019 v.1.4
           </div>
-      </div>
-        <footer>
-          <div className="row center-xs centrar color">
-          Proyecto SIGAP © 2019 v.1.4
-          </div>
-          </footer>
+                </footer>
 
-      </div>
-    )
-  }
+            </div>
+        )
+    }
 
-    Regresar=(e)=>{
-    //cambiar estado de alumnos a vacio
-    browserHistory.push('/');
-    e.preventDefault();
+    Regresar = (e) => {
+        //cambiar estado de alumnos a vacio
+        browserHistory.push('/vista/loginFormAdmi');
+        e.preventDefault();
 
     }
 

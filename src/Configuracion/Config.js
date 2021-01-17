@@ -1,4 +1,4 @@
 
-   const CONFIG= 'http://localhost:8081/'
-   //const CONFIG= 'https://sigapdev2-consultarecibos-back.herokuapp.com/'   
+const CONFIG = 'http://' + window.location.hostname + ':8081/'
+//const CONFIG= 'https://sigapdev2-consultarecibos-back.herokuapp.com/'   
 export default CONFIG;
