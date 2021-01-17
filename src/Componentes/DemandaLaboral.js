@@ -37,6 +37,7 @@ class DemandaLaboral extends React.Component {
       arregloProgramaOriginal: [],
       curriculos: [],
       perfilEgreso: [],
+      cursosPlanEstudio: [],
       detalleEgreso: { id: 0, estado: 0, curriculo: 0, desc: 0, orden: 0 },
       detallePlan: { id: 0, plan: 0, ciclo: 0, cod_asig: 0, desc_asig: 0 }
     }
@@ -148,6 +149,7 @@ class DemandaLaboral extends React.Component {
     });
     setTimeout(() => {
       this.obtenerPerfilEgreso();
+      this.obtenerPlanEstudio();
     }, 100);
   }
 
@@ -224,6 +226,27 @@ class DemandaLaboral extends React.Component {
       })
   }
 
+  obtenerPlanEstudio = () => {
+    fetch(CONFIG + 'curso/programa/' + this.state.programa_actual.value + '/planestudio/' + this.state.tipocurriculoInput.label.slice(1))
+      .then((response) => {
+        return response.json();
+      })
+      .then((resultado) => {
+        //Limpieza de datos porque el backend esta mal hecho xd
+        resultado.forEach(element => {
+          element.numciclo = parseInt(element.numciclo[0])
+          element.numcreditaje = parseInt(element.numcreditaje[0])
+          element.planestudios = parseInt(element.planestudios)
+          element.idPrograma = element.idPrograma.idPrograma
+        });
+        delete resultado.preferenciaList;
+        this.setState({
+          cursosPlanEstudio: resultado
+        })
+        console.log(this.state.cursosPlanEstudio)
+      })
+  }
+
   recorrerPerfilEgreso = () => {
     var indice = 1;
     return (
@@ -232,10 +255,10 @@ class DemandaLaboral extends React.Component {
           <div className="alcentro " key={key}>
             <div className="col-xs-12 row" >
 
-              <div className="cuadro-borde col-xs-1  " id={"fila2-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_id}</div></div>
-              <div className="cuadro-borde col-xs-1  " id={"fila3-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].estado_id}</div></div>
-              <div className="cuadro-borde col-xs-2  " id={"fila5-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].curriculo_id}</div></div>
-              <div className="cuadro-borde col-xs-3  " id={"fila5-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_desc}</div></div>
+              <div className="cuadro-borde col-xs-1  " id={"fila1-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_id}</div></div>
+              <div className="cuadro-borde col-xs-1  " id={"fila2-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].estado_id}</div></div>
+              <div className="cuadro-borde col-xs-2  " id={"fila3-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].curriculo_id}</div></div>
+              <div className="cuadro-borde col-xs-3  " id={"fila4-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_desc}</div></div>
               <div className="cuadro-borde col-xs-2  " id={"fila5-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_norden}</div></div>
             </div>
           </div>
@@ -247,6 +270,31 @@ class DemandaLaboral extends React.Component {
           </div>
         ))
   }
+
+  recorrerPlanEstudio = () => {
+    var indice = 1;
+    return (
+      (this.state.cursosPlanEstudio.length > 0) ?
+        Object.keys(this.state.cursosPlanEstudio).map(key => (
+          <div className="alcentro " key={key}>
+            <div className="col-xs-12 row" >
+
+              <div className="cuadro-borde col-xs-2" id={"fila1-" + key}><div className="margenes-padding">{this.state.cursosPlanEstudio[key].codAsignatura}</div></div>
+              <div className="cuadro-borde col-xs-4" id={"fila2-" + key}><div className="margenes-padding">{this.state.cursosPlanEstudio[key].nomCurso}</div></div>
+              <div className="cuadro-borde col-xs-2" id={"fila3-" + key}><div className="margenes-padding">{this.state.cursosPlanEstudio[key].numciclo}</div></div>
+              <div className="cuadro-borde col-xs-2" id={"fila4-" + key}><div className="margenes-padding">{this.state.cursosPlanEstudio[key].numcreditaje}</div></div>
+              <div className="cuadro-borde col-xs-2" id={"fila5-" + key}><div className="margenes-padding">{this.state.cursosPlanEstudio[key].tipocurso}</div></div>
+            </div>
+          </div>
+        )) : (
+          <div className="alcentro ">
+            <div className="col-xs-12 row">
+              <div className="cuadro-borde col-xs-9">Sin datos de alumnos</div>
+            </div>
+          </div>
+        ))
+  }
+
   render () {
 
     return (
@@ -351,22 +399,15 @@ class DemandaLaboral extends React.Component {
             <div id="plan">
               <div className="alcentro ">
                 <div className="col-xs-12 row">
-                  <div className="verdeagua cuadro-borde col-xs-1"><b>ID</b></div>
-                  <div className="verdeagua cuadro-borde col-xs-2"><b>PLAN</b></div>
-                  <div className="verdeagua cuadro-borde col-xs-1"><b>CICLO</b></div>
-                  <div className="verdeagua cuadro-borde col-xs-2"><b>COD_ASIGNATURA</b></div>
-                  <div className="verdeagua cuadro-borde col-xs-3"><b>DESC_ASIGNATURA</b></div>
+                  <div className="verdeagua cuadro-borde col-xs-2"><b>CÓDIGO</b></div>
+                  <div className="verdeagua cuadro-borde col-xs-4"><b>CURSO</b></div>
+                  <div className="verdeagua cuadro-borde col-xs-2"><b>CICLO</b></div>
+                  <div className="verdeagua cuadro-borde col-xs-2"><b>CREDITOS</b></div>
+                  <div className="verdeagua cuadro-borde col-xs-2"><b>TIPO</b></div>
                 </div>
               </div>
-              <div className="alcentro ">
-                <div className="col-xs-12 row">
-                  <div className="cuadro-borde col-xs-1">{this.state.detallePlan.id}</div>
-                  <div className="cuadro-borde col-xs-2"> {this.state.detallePlan.plan}</div>
-                  <div className="cuadro-borde col-xs-1"> {this.state.detallePlan.ciclo}</div>
-                  <div className="cuadro-borde col-xs-2"> {this.state.detallePlan.cod_asig}</div>
-                  <div className="cuadro-borde col-xs-3"> {this.state.detallePlan.desc_asig}</div>
-                </div>
-              </div>
+
+              {this.recorrerPlanEstudio()}
             </div>
           </div >
 
