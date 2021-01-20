@@ -279,7 +279,7 @@ class DemandaLaboral extends React.Component {
         )) : (
           <div className="alcentro ">
             <div className="col-xs-12 row">
-              <div className="cuadro-borde col-xs-9">Sin datos de alumnos</div>
+              <div className="cuadro-borde col-xs-9">Sin datos del perfil de egreso</div>
             </div>
           </div>
         ))
@@ -303,7 +303,7 @@ class DemandaLaboral extends React.Component {
         )) : (
           <div className="alcentro ">
             <div className="col-xs-12 row">
-              <div className="cuadro-borde col-xs-12">Sin datos de alumnos</div>
+              <div className="cuadro-borde col-xs-12">Sin datos del plan de estudio</div>
             </div>
           </div>
         ))
