@@ -158,7 +158,7 @@ class DemandaLaboral extends React.Component {
 
   handleChangeSelectArea = (estado) => {
     this.setState({
-      area_acutal: { value: estado.value, label: estado.label }
+      area_auctal: { value: estado.value, label: estado.label }
     });
   }
 
