@@ -114,8 +114,8 @@ class DemandaLaboral extends React.Component {
 
     this.setState({
       optionsCurriculo: [],
-      optionsNaturaleza: [],
-      optionsArea: [],
+      perfilEgreso: [],
+      cursosPlanEstudio: [],
       programa_actual: { value: "-1", label: "Seleccione un programa" },
       curriculo_actual: { value: "-1", label: "Seleccione un curriculo" },
       naturaleza_actual: { value: "-1", label: "Seleccione naturaleza" },
@@ -127,8 +127,6 @@ class DemandaLaboral extends React.Component {
     //if(estado!== null){
     this.setState({
       optionsCurriculo: [],
-      optionsNaturaleza: [],
-      optionsArea: [],
       naturaleza_actual: { value: "-1", label: "Seleccione naturaleza" },
       area_actual: { value: "-1", label: "Seleccione area" },
     });
@@ -154,13 +152,13 @@ class DemandaLaboral extends React.Component {
 
   handleChangeSelectNaturaleza = (estado) => {
     this.setState({
-      naturaleza: { value: estado.value, label: estado.label }
+      naturaleza_actual: { value: estado.value, label: estado.label }
     });
   }
 
   handleChangeSelectArea = (estado) => {
     this.setState({
-      area: { value: estado.value, label: estado.label }
+      area_acutal: { value: estado.value, label: estado.label }
     });
   }
 
