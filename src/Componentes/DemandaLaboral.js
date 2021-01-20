@@ -289,7 +289,7 @@ class DemandaLaboral extends React.Component {
         )) : (
           <div className="alcentro ">
             <div className="col-xs-12 row">
-              <div className="cuadro-borde col-xs-9">Sin datos de alumnos</div>
+              <div className="cuadro-borde col-xs-12">Sin datos de alumnos</div>
             </div>
           </div>
         ))
@@ -299,7 +299,7 @@ class DemandaLaboral extends React.Component {
 
     return (
       <div>
-        <h3>DEMANDA LABORAL
+        <h3> Módulo Demanda Laboral
                 <ul id="nav-mobile" className=" row right  hide-on-med-and-down">
             <li ><a className="seleccionar col" onClick={this.Regresar} >Regresar<i className="material-icons right">reply</i></a></li>
           </ul>
