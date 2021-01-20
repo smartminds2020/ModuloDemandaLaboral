@@ -17,22 +17,19 @@ class DemandaLaboral extends React.Component {
       estado: 0,
       idPrograma: '',
       //valores para los select
-      optionsTipoPrograma: [],
-      optionsCurriculos: [],
-      programas: [],
+      optionsTipoPrograma: [{ value: "03", label: "Maestria" }, { value: "05", label: "Doctorado" }, { value: "06", label: "Diplomatura" }],
+      optionsPrograma: [],
+      optionsCurriculo: [],
+      optionsNaturaleza: [],
+      optionsArea: [],
       programasBD: [],
-      select_programas: [],
-      programa_actual: { value: "-1", label: "Seleccione un programa" },
-      tipo_programa: [{ value: "03", label: "Maestria" }, { value: "05", label: "Doctorado" }, { value: "06", label: "Diplomatura" }],
       tipo_actual: { value: "-1", label: "Seleccione un tipo" },
-      naturaleza: { value: "-1", label: "Seleccione naturaleza" },
-      area: { value: "-1", label: "Seleccione area" },
-      semestres: [],
-      vacio: true,
-      alumnosM: [],
+      programa_actual: { value: "-1", label: "Seleccione un programa" },
+      curriculo_actual: { value: "-1", label: "Seleccione un programa" },
+      naturaleza_actual: { value: "-1", label: "Seleccione naturaleza" },
+      area_actual: { value: "-1", label: "Seleccione area" },
+      vacio: false,
       arregloAlumnos: [],
-      programaSeleccionado: 0,
-      alumnosM: [],
       cambiar: true,
       arregloProgramaOriginal: [],
       curriculos: [],
@@ -60,28 +57,11 @@ class DemandaLaboral extends React.Component {
         })
       })
 
-    let arreglo = [];
-
-    fetch(CONFIG + 'alumno/alumnoprograma/programa/semestres')
-      .then((response) => {
-        return response.json();
-      })
-      .then((semestres) => {
-        this.setState({
-          semestres
-        })
-
-        Object.keys(semestres).map(key => (
-          arreglo.push({ value: key, label: semestres[key].semestre })
-        ))
-
-        this.setState({
-          optionsSemestrePrimer: arreglo,
-          optionsSemestreSegundo: arreglo
-        })
-      })
-
+    this.obtenerAreas();
+    this.obtenerNaturalezas();
   }
+
+
 
   handleChangeSelectTipo = (estado) => {
     this.setState({
@@ -100,7 +80,7 @@ class DemandaLaboral extends React.Component {
           : null,
 
         this.setState({
-          programas: arreglo/**/
+          optionsPrograma: arreglo/**/
         })
       ))
         ; break;
@@ -113,7 +93,7 @@ class DemandaLaboral extends React.Component {
           : null,
 
         this.setState({
-          programas: arreglo/**/
+          optionsPrograma: arreglo/**/
         })
       ))
         ; break;
@@ -126,26 +106,45 @@ class DemandaLaboral extends React.Component {
           : null,
 
         this.setState({
-          programas: arreglo/**/
+          optionsPrograma: arreglo/**/
         })
       ))
         ; break;
     }
+
+    this.setState({
+      optionsCurriculo: [],
+      optionsNaturaleza: [],
+      optionsArea: [],
+      programa_actual: { value: "-1", label: "Seleccione un programa" },
+      curriculo_actual: { value: "-1", label: "Seleccione un curriculo" },
+      naturaleza_actual: { value: "-1", label: "Seleccione naturaleza" },
+      area_actual: { value: "-1", label: "Seleccione area" },
+    });
   }
 
   handleChangeSelectPrograma = (estado) => {
     //if(estado!== null){
     this.setState({
+      optionsCurriculo: [],
+      optionsNaturaleza: [],
+      optionsArea: [],
+      naturaleza_actual: { value: "-1", label: "Seleccione naturaleza" },
+      area_actual: { value: "-1", label: "Seleccione area" },
+    });
+
+    this.setState({
       programa_actual: { value: estado.value, label: estado.label }
     });
     setTimeout(() => {
-      this.seleccionarCur();
+      this.obtenerCurriculos();
     }, 100);
+
   }
 
   handleChangeSelectCurriculo = (estado) => {
     this.setState({
-      tipocurriculoInput: { value: estado.value, label: estado.label }
+      curriculo_actual: { value: estado.value, label: estado.label }
     });
     setTimeout(() => {
       this.obtenerPerfilEgreso();
@@ -153,81 +152,95 @@ class DemandaLaboral extends React.Component {
     }, 100);
   }
 
+  handleChangeSelectNaturaleza = (estado) => {
+    this.setState({
+      naturaleza: { value: estado.value, label: estado.label }
+    });
+  }
+
+  handleChangeSelectArea = (estado) => {
+    this.setState({
+      area: { value: estado.value, label: estado.label }
+    });
+  }
+
   Regresar = (e) => {
     browserHistory.push('/vista/loginFormAdmi');
     e.preventDefault();
   }
 
-  handleChangeSelectTipoPrograma = (estado) => {
-    this.setState({
-      TipopresupuestoInput: { value: estado.value, label: estado.label },
-      vacio: false
-    });
-  }
-
-  handleChangeSelectNaturaleza = (estado) => {
-
-  }
-
-  handleChangeSelectArea = (estado) => {
-
-  }
-  //Seleccionar Programa
-  seleccionar = () => {
-    fetch(CONFIG + 'alumno/alumnoprograma/programa/alumnosemestres/' + this.state.semestreInput1.label + "/" + this.state.semestreInput2.label + "/" + this.state.programaSeleccionado)
+  obtenerAreas = () => {
+    fetch(CONFIG + 'area/listar')
       .then((response) => {
         return response.json();
       })
       .then((resultado) => {
+        var optionsArea = [];
+        resultado.forEach(element => {
+          optionsArea = [...optionsArea, { value: element.area_id, label: element.area_desc }]
+        });
         this.setState({
-          alumnosM: resultado
+          areas: resultado,
+          optionsArea
         })
 
-        console.log(this.state.arregloAlumnos)
-
+        console.log(this.state.optionsArea)
       })
   }
 
-  seleccionarCur = () => {
+  obtenerNaturalezas = () => {
+    fetch(CONFIG + 'naturaleza/listar')
+      .then((response) => {
+        return response.json();
+      })
+      .then((resultado) => {
+        var optionsNaturaleza = [];
+        resultado.forEach(element => {
+          optionsNaturaleza = [...optionsNaturaleza, { value: element.naturaleza_id, label: element.naturaleza_desc }]
+        });
+        this.setState({
+          naturalezas: resultado,
+          optionsNaturaleza
+        })
+
+        console.log(this.state.optionsNaturaleza)
+      })
+  }
+
+  obtenerCurriculos = () => {
     fetch(CONFIG + 'alumno/alumnoprograma/programa/curriculo/' + this.state.programa_actual.value)
       .then((response) => {
         return response.json();
       })
       .then((resultado) => {
-        var optionsCurriculos = [];
+        var optionsCurriculo = [];
         resultado.forEach(element => {
-          optionsCurriculos = [...optionsCurriculos, { value: element.curriculo_id, label: element.curriculo_desc }]
+          optionsCurriculo = [...optionsCurriculo, { value: element.curriculo_id, label: element.curriculo_desc }]
         });
         this.setState({
           curriculos: resultado,
-          optionsCurriculos
+          optionsCurriculo: optionsCurriculo
         })
 
-        console.log(this.state.optionsCurriculos)
-
+        console.log(this.state.optionsCurriculo)
       })
   }
 
   obtenerPerfilEgreso = () => {
-    fetch(CONFIG + 'alumno/alumnoprograma/programa/perfilEgreso/' + this.state.tipocurriculoInput.value)
+    fetch(CONFIG + 'alumno/alumnoprograma/programa/perfilEgreso/' + this.state.curriculo_actual.value)
       .then((response) => {
         return response.json();
       })
       .then((resultado) => {
-
-
         this.setState({
           perfilEgreso: resultado,
-
         })
-
         // console.log(this.state.optionsCurriculos)
-
       })
   }
 
   obtenerPlanEstudio = () => {
-    fetch(CONFIG + 'curso/programa/' + this.state.programa_actual.value + '/planestudio/' + this.state.tipocurriculoInput.label.slice(1))
+    fetch(CONFIG + 'curso/programa/' + this.state.programa_actual.value + '/planestudio/' + this.state.curriculo_actual.label.slice(1))
       .then((response) => {
         return response.json();
       })
@@ -316,7 +329,7 @@ class DemandaLaboral extends React.Component {
                 id="selectipo"
                 value={this.state.tipo_actual}
                 onChange={this.handleChangeSelectTipo}
-                options={this.state.tipo_programa}
+                options={this.state.optionsTipoPrograma}
               />
 
               <label className="col-xs-1">Programa</label>
@@ -326,7 +339,7 @@ class DemandaLaboral extends React.Component {
                 id="selecprograma"
                 value={this.state.programa_actual}
                 onChange={this.handleChangeSelectPrograma}
-                options={this.state.programas}
+                options={this.state.optionsPrograma}
               />
             </div>
           </div>
@@ -338,9 +351,9 @@ class DemandaLaboral extends React.Component {
                 placeholder="Seleccione un curriculo"
                 name="seleccurriculo"
                 id="seleccurriculo"
-                value={this.state.tipocurriculoInput}
+                value={this.state.curriculo_actual}
                 onChange={this.handleChangeSelectCurriculo}
-                options={this.state.optionsCurriculos}
+                options={this.state.optionsCurriculo}
               />
             </div>
           </div>
@@ -374,19 +387,19 @@ class DemandaLaboral extends React.Component {
                 placeholder="Seleccionar naturaleza"
                 name="naturaleza"
                 id="naturaleza"
-                value={this.state.semestreInput1}
-                onChange={this.handleChangeSelectSemestre1}
+                value={this.state.naturaleza_actual}
+                onChange={this.handleChangeSelectNaturaleza}
                 options={this.state.optionsNaturaleza}
                 disabled={this.state.vacio}
               />
               <label className="col-xs-2">Area</label>
               <Select className="col-xs-2"
                 placeholder="Seleccionar area"
-                name="segundoperiodo"
-                id="segundoperiodo"
-                value={this.state.semestreInput2}
-                onChange={this.handleChangeSelectSemestre2}
-                options={this.state.optionsSemestreSegundo}
+                name="area"
+                id="area"
+                value={this.state.area_actual}
+                onChange={this.handleChangeSelectArea}
+                options={this.state.optionsArea}
                 disabled={this.state.vacio}
               />
               <button onClick={this.seleccionar} className=" waves-light btn-small">Filtrar</button>
