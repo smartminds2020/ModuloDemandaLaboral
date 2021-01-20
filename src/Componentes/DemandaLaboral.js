@@ -67,6 +67,7 @@ class DemandaLaboral extends React.Component {
     if (estado == null) {
       this.setState({
         tipo_actual: { value: "-1", label: "Seleccione un tipo" },
+        optionsPrograma: [],
         optionsCurriculo: [],
         programa_actual: { value: "-1", label: "Seleccione un programa" },
         curriculo_actual: { value: "-1", label: "Seleccione un curriculo" },
@@ -174,6 +175,8 @@ class DemandaLaboral extends React.Component {
     if (estado == null) {
       this.setState({
         curriculo_actual: { value: "-1", label: "Seleccione un curriculo" },
+        perfilEgreso: [],
+        cursosPlanEstudio: [],
       });
       return;
     }
@@ -316,7 +319,7 @@ class DemandaLaboral extends React.Component {
 
               <div className="cuadro-borde col-xs-1  " id={"fila1-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_id}</div></div>
               <div className="cuadro-borde col-xs-1  " id={"fila2-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].estado_id}</div></div>
-              <div className="cuadro-borde col-xs-2  " id={"fila3-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].curriculo_id}</div></div>
+              {/* <div className="cuadro-borde col-xs-2  " id={"fila3-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].curriculo_id}</div></div> */}
               <div className="cuadro-borde col-xs-3  " id={"fila4-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_desc}</div></div>
               <div className="cuadro-borde col-xs-2  " id={"fila5-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_norden}</div></div>
             </div>
@@ -324,7 +327,7 @@ class DemandaLaboral extends React.Component {
         )) : (
           <div className="alcentro ">
             <div className="col-xs-12 row">
-              <div className="cuadro-borde col-xs-9">Sin datos del perfil de egreso</div>
+              <div className="cuadro-borde col-xs-7">Sin datos del perfil de egreso</div>
             </div>
           </div>
         ))
@@ -415,9 +418,9 @@ class DemandaLaboral extends React.Component {
                 <div className="col-xs-12 row">
                   <div className="verdeagua cuadro-borde col-xs-1"><b>ID</b></div>
                   <div className="verdeagua cuadro-borde col-xs-1"><b>ESTADO</b></div>
-                  <div className="verdeagua cuadro-borde col-xs-2"><b>CURRICULO_ID</b></div>
+                  {/* <div className="verdeagua cuadro-borde col-xs-2"><b>CURRÍCULO ID</b></div> */}
                   <div className="verdeagua cuadro-borde col-xs-3"><b>DESCRIPCIÓN</b></div>
-                  <div className="verdeagua cuadro-borde col-xs-2"><b>N_ORDEN</b></div>
+                  <div className="verdeagua cuadro-borde col-xs-2"><b>N° ORDEN</b></div>
                 </div>
               </div>
               {this.recorrerPerfilEgreso()}
@@ -438,7 +441,7 @@ class DemandaLaboral extends React.Component {
                 options={this.state.optionsNaturaleza}
                 disabled={this.state.vacio}
               />
-              <label className="col-xs-2">Area</label>
+              <label className="col-xs-2">Área</label>
               <Select className="col-xs-2"
                 placeholder="Seleccionar area"
                 name="area"
