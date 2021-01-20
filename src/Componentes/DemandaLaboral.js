@@ -114,12 +114,12 @@ class DemandaLaboral extends React.Component {
 
     this.setState({
       optionsCurriculo: [],
-      perfilEgreso: [],
-      cursosPlanEstudio: [],
       programa_actual: { value: "-1", label: "Seleccione un programa" },
       curriculo_actual: { value: "-1", label: "Seleccione un curriculo" },
       naturaleza_actual: { value: "-1", label: "Seleccione naturaleza" },
       area_actual: { value: "-1", label: "Seleccione area" },
+      perfilEgreso: [],
+      cursosPlanEstudio: [],
     });
   }
 
@@ -127,8 +127,11 @@ class DemandaLaboral extends React.Component {
     //if(estado!== null){
     this.setState({
       optionsCurriculo: [],
+      curriculo_actual: { value: "-1", label: "Seleccione un curriculo" },
       naturaleza_actual: { value: "-1", label: "Seleccione naturaleza" },
       area_actual: { value: "-1", label: "Seleccione area" },
+      perfilEgreso: [],
+      cursosPlanEstudio: [],
     });
 
     this.setState({
