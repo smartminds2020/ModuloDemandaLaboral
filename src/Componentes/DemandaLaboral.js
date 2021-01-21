@@ -213,6 +213,8 @@ class DemandaLaboral extends React.Component {
     });
   }
 
+ 
+
   Regresar = (e) => {
     browserHistory.push('/vista/loginFormAdmi');
     e.preventDefault();
@@ -245,7 +247,7 @@ class DemandaLaboral extends React.Component {
       .then((resultado) => {
         var optionsNaturaleza = [];
         resultado.forEach(element => {
-          optionsNaturaleza = [...optionsNaturaleza, { value: element.naturaleza_id, label: element.naturaleza_desc }]
+          optionsNaturaleza = [...optionsNaturaleza, { value: element.id_naturaleza, label: element.naturaleza_desc }]
         });
         this.setState({
           naturalezas: resultado,
@@ -309,6 +311,70 @@ class DemandaLaboral extends React.Component {
       })
   }
 
+  filtrarAreaNat = () => {
+    console.log(this.state.naturaleza_actual.value);
+    if(this.state.naturaleza_actual.value != -1 && this.state.area_actual.value == -1){
+      fetch(CONFIG + 'curso/programa/' + this.state.programa_actual.value + '/planestudio/' + this.state.curriculo_actual.label.slice(1)+'/naturaleza/'+this.state.naturaleza_actual.value)
+      .then((response) => {
+        return response.json();
+      })
+      .then((resultado) => {
+        //Limpieza de datos porque el backend esta mal hecho xd
+        resultado.forEach(element => {
+          element.numciclo = parseInt(element.numciclo[0])
+          element.numcreditaje = parseInt(element.numcreditaje[0])
+          element.planestudios = parseInt(element.planestudios)
+          element.idPrograma = element.idPrograma.idPrograma
+        });
+        delete resultado.preferenciaList;
+        this.setState({
+          cursosPlanEstudio: resultado
+        })
+        console.log(this.state.cursosPlanEstudio)
+      })
+    }else if(this.state.naturaleza_actual.value == -1 && this.state.area_actual.value != -1){
+      fetch(CONFIG + 'curso/programa/' + this.state.programa_actual.value + '/planestudio/' + this.state.curriculo_actual.label.slice(1)+'/area/'+this.state.area_actual.value)
+      .then((response) => {
+        return response.json();
+      })
+      .then((resultado) => {
+        //Limpieza de datos porque el backend esta mal hecho xd
+        resultado.forEach(element => {
+          element.numciclo = parseInt(element.numciclo[0])
+          element.numcreditaje = parseInt(element.numcreditaje[0])
+          element.planestudios = parseInt(element.planestudios)
+          element.idPrograma = element.idPrograma.idPrograma
+        });
+        delete resultado.preferenciaList;
+        this.setState({
+          cursosPlanEstudio: resultado
+        })
+        console.log(this.state.cursosPlanEstudio)
+      })
+    }else if(this.state.naturaleza_actual.value != -1 && this.state.area_actual.value != -1){
+      fetch(CONFIG + 'curso/programa/' + this.state.programa_actual.value + '/planestudio/' + this.state.curriculo_actual.label.slice(1)+'/area/'+this.state.area_actual.value + '/naturaleza/'+this.state.naturaleza_actual.value)
+      .then((response) => {
+        return response.json();
+      })
+      .then((resultado) => {
+        //Limpieza de datos porque el backend esta mal hecho xd
+        resultado.forEach(element => {
+          element.numciclo = parseInt(element.numciclo[0])
+          element.numcreditaje = parseInt(element.numcreditaje[0])
+          element.planestudios = parseInt(element.planestudios)
+          element.idPrograma = element.idPrograma.idPrograma
+        });
+        delete resultado.preferenciaList;
+        this.setState({
+          cursosPlanEstudio: resultado
+        })
+        console.log(this.state.cursosPlanEstudio)
+      })
+    }else{
+      this.obtenerPlanEstudio();
+    }
+    
+  }
   recorrerPerfilEgreso = () => {
     var indice = 1;
     return (
@@ -320,14 +386,14 @@ class DemandaLaboral extends React.Component {
               <div className="cuadro-borde col-xs-1  " id={"fila1-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_id}</div></div>
               <div className="cuadro-borde col-xs-1  " id={"fila2-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].estado_id}</div></div>
               {/* <div className="cuadro-borde col-xs-2  " id={"fila3-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].curriculo_id}</div></div> */}
-              <div className="cuadro-borde col-xs-3  " id={"fila4-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_desc}</div></div>
+              <div className="cuadro-borde col-xs-5  " id={"fila4-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_desc}</div></div>
               <div className="cuadro-borde col-xs-2  " id={"fila5-" + key}><div className="margenes-padding">{this.state.perfilEgreso[key].perfilegreso_norden}</div></div>
             </div>
           </div>
         )) : (
           <div className="alcentro ">
             <div className="col-xs-12 row">
-              <div className="cuadro-borde col-xs-7">Sin datos del perfil de egreso</div>
+              <div className="cuadro-borde col-xs-9">Sin datos del perfil de egreso</div>
             </div>
           </div>
         ))
@@ -419,7 +485,7 @@ class DemandaLaboral extends React.Component {
                   <div className="verdeagua cuadro-borde col-xs-1"><b>ID</b></div>
                   <div className="verdeagua cuadro-borde col-xs-1"><b>ESTADO</b></div>
                   {/* <div className="verdeagua cuadro-borde col-xs-2"><b>CURRÍCULO ID</b></div> */}
-                  <div className="verdeagua cuadro-borde col-xs-3"><b>DESCRIPCIÓN</b></div>
+                  <div className="verdeagua cuadro-borde col-xs-5"><b>DESCRIPCIÓN</b></div>
                   <div className="verdeagua cuadro-borde col-xs-2"><b>N° ORDEN</b></div>
                 </div>
               </div>
@@ -451,7 +517,7 @@ class DemandaLaboral extends React.Component {
                 options={this.state.optionsArea}
                 disabled={this.state.vacio}
               />
-              <button onClick={this.seleccionar} className=" waves-light btn-small">Filtrar</button>
+              <button onClick={this.filtrarAreaNat} className=" waves-light btn-small">Filtrar</button>
             </div>
           </div>
           <br />
