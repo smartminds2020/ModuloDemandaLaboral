@@ -1594,7 +1594,7 @@ importePago=(e)=>{
 
 }
 regresarPaginaPrincipal=(e)=>{
-  browserHistory.push("/");
+  browserHistory.push("/vista/loginFormAdmi");
   e.preventDefault();
 }
 enviarFormulario=(e)=>{
